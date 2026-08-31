@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="PepperShop.Cart.Library/PepperShop.Cart.Library.csproj" />
   <Project Path="PepperShop.Cart.API/PepperShop.Cart.API.csproj" />
+  <Project Path="PepperShop.Cart.Data/PepperShop.Cart.Data.csproj" Id="6c586e8e-e714-4ec5-848d-f69622318074" />
 </Solution>

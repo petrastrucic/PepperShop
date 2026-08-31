@@ -4,7 +4,7 @@ namespace PepperShop.Cart.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class CartController : ControllerBase
     {
         private static readonly string[] Summaries =
         [
