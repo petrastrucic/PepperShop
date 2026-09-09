@@ -1,4 +1,6 @@
 
+using System.Security.Claims;
+
 namespace PepperShop.Cart.API
 {
     public class Program
@@ -9,6 +11,14 @@ namespace PepperShop.Cart.API
 
             // Add services to the container.
 
+            builder.Services.AddAuthentication()
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://localhost:5001";
+                    options.TokenValidationParameters.ValidateAudience = false;
+                });
+
+            builder.Services.AddAuthorization();
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
@@ -33,7 +43,8 @@ namespace PepperShop.Cart.API
 
             app.UseAuthorization();
 
-
+            app.MapGet("identity", (ClaimsPrincipal user) => user.Claims.Select(c => new { c.Type, c.Value }))
+                .RequireAuthorization();
             app.MapControllers();
 
             app.Run();
