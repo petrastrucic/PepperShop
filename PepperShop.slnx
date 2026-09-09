@@ -4,5 +4,7 @@
     <Project Path="Cart service/PepperShop.Cart.Data/PepperShop.Cart.Data.csproj" />
     <Project Path="Cart service/PepperShop.Cart.Library/PepperShop.Cart.Library.csproj" />
   </Folder>
-  <Folder Name="/Identity service/" />
+  <Folder Name="/Identity service/">
+    <Project Path="Identity service/IdentityServer/IdentityServer.csproj" Id="bc79a555-4107-4d99-b487-61ac1247bc2e" />
+  </Folder>
 </Solution>
