@@ -18,7 +18,14 @@ namespace PepperShop.Cart.API
                     options.TokenValidationParameters.ValidateAudience = false;
                 });
 
-            builder.Services.AddAuthorization();
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CartServiceScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "cartService");
+                });
+            });
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
@@ -44,8 +51,8 @@ namespace PepperShop.Cart.API
             app.UseAuthorization();
 
             app.MapGet("identity", (ClaimsPrincipal user) => user.Claims.Select(c => new { c.Type, c.Value }))
-                .RequireAuthorization();
-            app.MapControllers();
+                .RequireAuthorization("CartServiceScope");
+            //app.MapControllers();
 
             app.Run();
         }
