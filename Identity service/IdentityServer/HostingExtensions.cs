@@ -50,8 +50,8 @@ namespace IdentityServer
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiScopes(Config.ApiScopes)
                 .AddInMemoryClients(Config.Clients)
-                .AddTestUsers(TestUsers.Users);
-            //.AddLicenseSummary();
+                .AddTestUsers(TestUsers.Users)
+                .AddLicenseSummary();
 
             builder.Services.AddAuthentication()
                 // adding external provider

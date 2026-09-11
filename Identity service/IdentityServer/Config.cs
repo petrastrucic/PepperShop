@@ -47,8 +47,12 @@ namespace IdentityServer
 
                         AllowedScopes =
                         {
+                            // user information
                             IdentityServerConstants.StandardScopes.OpenId,
-                            IdentityServerConstants.StandardScopes.Profile
+                            IdentityServerConstants.StandardScopes.Profile,
+
+                            // API access
+                            "cartService"
                         }
                     }
                 };
