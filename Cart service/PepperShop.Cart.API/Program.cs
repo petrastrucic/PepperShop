@@ -52,7 +52,7 @@ namespace PepperShop.Cart.API
 
             app.MapGet("identity", (ClaimsPrincipal user) => user.Claims.Select(c => new { c.Type, c.Value }))
                 .RequireAuthorization("CartServiceScope");
-            //app.MapControllers();
+            app.MapControllers();
 
             app.Run();
         }
