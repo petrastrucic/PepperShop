@@ -7,8 +7,8 @@
 ### Authentication
 #### Client credentials PoC
 1. Run IdentityServer (self-hosted launch profile)
-- home url: https://localhost:5001/
-- discovery document: https://localhost:5001/.well-known/openid-configuration
+   - home url: https://localhost:5001/
+   - discovery document: https://localhost:5001/.well-known/openid-configuration
 2. Run CartService API (IIS Express launch profile)
 3. Run ClientCredentialsClient
 
