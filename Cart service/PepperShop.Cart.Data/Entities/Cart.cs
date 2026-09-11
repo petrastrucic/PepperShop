@@ -2,7 +2,7 @@
 {
     public class Cart
     {
-        public string Id { get; set; }
+        public string id { get; set; }
 
         public List<CartItem>? Items { get; set; }
 
@@ -10,12 +10,12 @@
 
         public decimal TotalPrice { get; set; }
 
-        public Cart(string id,
+        public Cart(string cartId,
             List<CartItem>? items = null,
             decimal discount = 0,
             decimal totalPrice = 0)
         {
-            Id = id;
+            id = cartId;
             Items = items;
             Discount = discount;
             TotalPrice = totalPrice;

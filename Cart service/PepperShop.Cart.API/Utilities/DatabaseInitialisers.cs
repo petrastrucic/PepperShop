@@ -1,4 +1,3 @@
-﻿
 using Azure.Core;
 using Azure.Identity;
 using Microsoft.Azure.Cosmos;
@@ -34,14 +33,14 @@ namespace PepperShop.Cart.API.Utilities
             // TODO?: retry policy based on DatabaseResponse class
             // New instance of Database class referencing the server-side database
             Database database = await client.CreateDatabaseIfNotExistsAsync(
-                id: "pepperShopDatabase"
+                id: "peppershopDatabase"
             );
 
             // TODO?: retry policy based on ContainerResponse class
             // New instance of Container class referencing the server-side container
             Container container = await database.CreateContainerIfNotExistsAsync(
                 id: "carts",
-                partitionKeyPath: "/Id",
+                partitionKeyPath: "/id",
                 throughput: 400
             );
 
