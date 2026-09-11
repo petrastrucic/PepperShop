@@ -1,38 +1,18 @@
-
+using PepperShop.Cart.API.Utilities;
 using System.Security.Claims;
 
 namespace PepperShop.Cart.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            await DatabaseInitialisers.InitialiseDbStuffAsync();
 
-            builder.Services.AddAuthentication()
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = "https://localhost:5001";
-                    options.TokenValidationParameters.ValidateAudience = false;
-                });
-
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("CartServiceScope", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "cartService");
-                });
-            });
-            builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            var app = builder.Build();
+            var app = builder
+                .ConfigureServices();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -52,6 +32,7 @@ namespace PepperShop.Cart.API
 
             app.MapGet("identity", (ClaimsPrincipal user) => user.Claims.Select(c => new { c.Type, c.Value }))
                 .RequireAuthorization("CartServiceScope");
+
             app.MapControllers();
 
             app.Run();
