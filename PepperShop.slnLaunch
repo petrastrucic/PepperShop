@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "Start all projs",
+    "Projects": [
+      {
+        "Path": "Identity service\\IdentityServer\\IdentityServer.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Cart service\\PepperShop.Cart.API\\PepperShop.Cart.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Clients\\WebClient\\WebClient.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

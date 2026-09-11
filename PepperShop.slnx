@@ -1,5 +1,14 @@
 <Solution>
-  <Project Path="PepperShop.Cart.Library/PepperShop.Cart.Library.csproj" />
-  <Project Path="PepperShop.Cart.API/PepperShop.Cart.API.csproj" />
-  <Project Path="PepperShop.Cart.Data/PepperShop.Cart.Data.csproj" Id="6c586e8e-e714-4ec5-848d-f69622318074" />
+  <Folder Name="/Cart service/">
+    <Project Path="Cart service/PepperShop.Cart.API/PepperShop.Cart.API.csproj" />
+    <Project Path="Cart service/PepperShop.Cart.Data/PepperShop.Cart.Data.csproj" />
+    <Project Path="Cart service/PepperShop.Cart.Library/PepperShop.Cart.Library.csproj" />
+  </Folder>
+  <Folder Name="/Clients/">
+    <Project Path="Clients/ClientCredentialsClient/ClientCredentialsClient.csproj" Id="bf17e65a-5961-4d04-87e9-4d3e3864152c" />
+    <Project Path="Clients/WebClient/WebClient.csproj" />
+  </Folder>
+  <Folder Name="/Identity service/">
+    <Project Path="Identity service/IdentityServer/IdentityServer.csproj" Id="bc79a555-4107-4d99-b487-61ac1247bc2e" />
+  </Folder>
 </Solution>
