@@ -1,4 +1,6 @@
-﻿namespace PepperShop.Cart.API.Utilities
+﻿using PepperShop.Cart.API.Settings;
+
+namespace PepperShop.Cart.API.Utilities
 {
     internal static class HostingExtensions
     {
@@ -24,6 +26,9 @@
             builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.Configure<DatabaseSettings>(
+                builder.Configuration.GetSection("DatabaseSettings"));
 
             return builder.Build();
         }

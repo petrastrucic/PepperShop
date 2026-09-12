@@ -1,50 +1,46 @@
 using Azure.Core;
 using Azure.Identity;
 using Microsoft.Azure.Cosmos;
+using PepperShop.Cart.API.Settings;
 
 namespace PepperShop.Cart.API.Utilities
 {
-    public class DatabaseInitialisers
+    public class DatabaseInitiator
     {
         /// <summary>
         /// Initializes the database and containers for the application.
         /// </summary>
-        public static async Task InitialiseDbStuffAsync()
+        public static async Task ConfigureDatabaseAsync(DatabaseSettings dbSettings)
         {
-            // Local emulator values
-            // TODO: ADD ENDPOINT AS configuration["Cosmos:Endpoint"]
-            var endpoint = "https://localhost:8081";
-            var emulatorKey = Environment.GetEnvironmentVariable("COSMOS_EMULATOR_KEY") ?? "";
-
             // Use emulator in Development; use DefaultAzureCredential in non-local environments
             CosmosClient client;
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
             {
-                client = new CosmosClient(endpoint, emulatorKey);
+                client = new CosmosClient(dbSettings.ConnectionString, dbSettings.AuthKey);
             }
             else
             {
                 TokenCredential credential = new DefaultAzureCredential();
                 client = new CosmosClient(
-                    accountEndpoint: endpoint,
+                    accountEndpoint: dbSettings.ConnectionString,
                     tokenCredential: credential);
             }
 
             // TODO?: retry policy based on DatabaseResponse class
             // New instance of Database class referencing the server-side database
             Database database = await client.CreateDatabaseIfNotExistsAsync(
-                id: "peppershopDatabase"
+                id: dbSettings.DatabaseName
             );
 
             // TODO?: retry policy based on ContainerResponse class
             // New instance of Container class referencing the server-side container
             Container container = await database.CreateContainerIfNotExistsAsync(
-                id: "carts",
+                id: dbSettings.ContainerName,
                 partitionKeyPath: "/id",
                 throughput: 400
             );
 
-            await SeedDataAsync(container);
+            //await SeedDataAsync(container);
         }
 
         private static async Task SeedDataAsync(Container container)

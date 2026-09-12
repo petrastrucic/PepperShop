@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PepperShop.Cart.Data\PepperShop.Cart.Data.csproj" />
+    <ProjectReference Include="..\PepperShop.Cart.Library\PepperShop.Cart.Library.csproj" />
   </ItemGroup>
 
 </Project>

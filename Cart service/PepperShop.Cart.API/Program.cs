@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Options;
+using PepperShop.Cart.API.Settings;
 using PepperShop.Cart.API.Utilities;
 using System.Security.Claims;
 
@@ -9,10 +11,10 @@ namespace PepperShop.Cart.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            await DatabaseInitialisers.InitialiseDbStuffAsync();
-
             var app = builder
                 .ConfigureServices();
+
+            await DatabaseInitiator.ConfigureDatabaseAsync(app.Services.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
