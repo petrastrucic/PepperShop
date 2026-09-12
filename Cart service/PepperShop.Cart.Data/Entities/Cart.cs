@@ -10,6 +10,8 @@
 
         public decimal TotalPrice { get; set; }
 
+        public string Currency { get; set; }
+
         public Cart(string cartId,
             List<CartItem>? items = null,
             decimal discount = 0,
@@ -25,6 +27,8 @@
     public class CartItem()
     {
         public string ProductId { get; set; }
+
+        public decimal Price { get; set; }
 
         public int Quantity { get; set; }
     }

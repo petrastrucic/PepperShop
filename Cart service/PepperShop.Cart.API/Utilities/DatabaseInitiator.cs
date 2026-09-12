@@ -10,7 +10,7 @@ namespace PepperShop.Cart.API.Utilities
         /// <summary>
         /// Initializes the database and containers for the application.
         /// </summary>
-        public static async Task ConfigureDatabaseAsync(DatabaseSettings dbSettings)
+        public static CosmosClient ConfigureDbClient(DatabaseSettings dbSettings)
         {
             // Use emulator in Development; use DefaultAzureCredential in non-local environments
             CosmosClient client;
@@ -26,6 +26,14 @@ namespace PepperShop.Cart.API.Utilities
                     tokenCredential: credential);
             }
 
+            return client;
+        }
+
+        /// <summary>
+        /// Initializes the database and containers for the application.
+        /// </summary>
+        public static async Task ConfigureDatabaseAsync(CosmosClient client, DatabaseSettings dbSettings)
+        {
             // TODO?: retry policy based on DatabaseResponse class
             // New instance of Database class referencing the server-side database
             Database database = await client.CreateDatabaseIfNotExistsAsync(
@@ -40,7 +48,7 @@ namespace PepperShop.Cart.API.Utilities
                 throughput: 400
             );
 
-            //await SeedDataAsync(container);
+            await SeedDataAsync(container);
         }
 
         private static async Task SeedDataAsync(Container container)
