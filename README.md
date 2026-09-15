@@ -3,6 +3,7 @@
 ### Prepare environment for the project
 1. Install Azure Cosmos Emulator and run it locally. https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-develop-emulator?tabs=windows%2Ccsharp&pivots=api-nosql#install-the-emulator
 2. Run Emulator
+3. In `appsettings.Development.json` file in the solution, at `AuthKey` set your local emulator key
 
 ### Authentication
 #### Client credentials PoC
