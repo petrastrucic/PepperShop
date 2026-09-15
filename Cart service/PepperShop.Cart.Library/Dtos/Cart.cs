@@ -1,6 +1,6 @@
 ﻿namespace PepperShop.Cart.Library.Dtos
 {
-    internal class Cart
+    public class Cart
     {
         /// <summary>
         /// The unique identifier for the cart that is inherited from <see cref="Customer.Id"/>.
@@ -13,13 +13,15 @@
 
         public decimal TotalPrice { get; set; }
 
-        internal Cart(string id)
+        public string Currency { get; set; }
+
+        public Cart(string id)
         {
             Id = id;
         }
     }
 
-    internal class CartItem()
+    public class CartItem()
     {
         public string ProductId { get; set; }
 

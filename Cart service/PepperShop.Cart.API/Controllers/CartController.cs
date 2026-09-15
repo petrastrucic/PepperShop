@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PepperShop.Cart.Library.Services;
 
 namespace PepperShop.Cart.API.Controllers
 {
@@ -6,21 +7,41 @@ namespace PepperShop.Cart.API.Controllers
     [Route("[controller]")]
     public class CartController : ControllerBase
     {
-        private static readonly string[] Summaries =
-        [
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        ];
+        private readonly ICartService _cartService;
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public CartController(ICartService cartService)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            _cartService = cartService;
+        }
+
+        [HttpGet("/basic")]
+        public async Task<Library.Dtos.Cart> GetAsync(string userId)
+        {
+            return await _cartService.GetCartAsync(userId);
+        }
+
+        [HttpGet("/details")]
+        public async Task<Library.Dtos.Cart> GetDetailsAsync(string userId)
+        {
+            return await _cartService.GetCartDetailsAsync(userId);
+        }
+
+        [HttpPatch("/addProduct")]
+        public async Task<Library.Dtos.Cart> AddProductAsync(string userId, string productId)
+        {
+            return await _cartService.AddProductToCartAsync(userId, productId);
+        }
+
+        [HttpPatch("/removeProduct")]
+        public async Task<Library.Dtos.Cart> RemoveProductAsync(string userId, string productId)
+        {
+            return await _cartService.RemoveProductFromCartAsync(userId, productId);
+        }
+
+        [HttpPatch("/updateQuantity")]
+        public async Task<Library.Dtos.Cart> UpdateQuantityAsync(string userId, string productId, int newQuantity)
+        {
+            return await _cartService.UpdateProductQuantityInCartAsync(userId, productId, newQuantity);
         }
     }
 }
