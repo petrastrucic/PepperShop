@@ -14,11 +14,6 @@
         public decimal TotalPrice { get; set; }
 
         public string Currency { get; set; }
-
-        public Cart(string id)
-        {
-            Id = id;
-        }
     }
 
     public class CartItem()

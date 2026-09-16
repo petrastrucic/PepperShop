@@ -4,6 +4,10 @@
     <Project Path="Cart service/PepperShop.Cart.Data/PepperShop.Cart.Data.csproj" />
     <Project Path="Cart service/PepperShop.Cart.Library/PepperShop.Cart.Library.csproj" />
   </Folder>
+  <Folder Name="/Cart service/Tests/" />
+  <Folder Name="/Cart service/Tests/UnitTests/">
+    <Project Path="Cart service/Tests/UnitTests/CartServiceTests/CartServiceTests.csproj" Id="375e191f-76be-49ef-9a9a-31ab041fead2" />
+  </Folder>
   <Folder Name="/Clients/">
     <Project Path="Clients/ClientCredentialsClient/ClientCredentialsClient.csproj" Id="bf17e65a-5961-4d04-87e9-4d3e3864152c" />
     <Project Path="Clients/WebClient/WebClient.csproj" />
