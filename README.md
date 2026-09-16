@@ -26,11 +26,24 @@
 2. Run CartService API (https launch profile)
 3. Go to `https://localhost:4001/swagger/index.html`.
 
-   - On `/cart` endpoint provide userId `someRandomId` and you fetch seeded cart item.
-   - `/identity` endpoint produces 401 response since Swagger is not configured as one of the trusted clients.
+   - `/cart` endpoint with userId param = `someRandomId` fetches seeded cart item
+   - `/cart` endpoint with userId param empty space throws `400 BadRequest` and a validation message
+   - `/cart` endpoint with userId param set to any other throws `400 BadRequest` and a validation message
+   - you can observe x-correlation-id in the response header 
+   - `/identity` endpoint produces `401 Unauthorized` response since Swagger is not configured as one of the trusted clients
 
 ### Serilog
 Basic logging is added to the project. You can observe local logs on the path `**\PepperShop\Cart service\PepperShop.Cart.API\logs`.
 
-### HealthCheck
+### Health check
 Self-service health check is added for the API and it can be checked on the URL `https://localhost:4001/health/self`. Custom check for Cosmos db connection is also added and it can be checked on the URL `https://localhost:4001/health/cosmosdb`. If you exit local Cosmos storage emulator, health checks displays unhealthy status but it takes some time to load the result because of the retry policy.
+
+### CorrelationId middleware
+Reads, sets and propagates correlation id in HTTP requests and should also automatically log it using Serilog.
+//TODO: fix Serilog
+
+### AutoMapper
+Added simple AutoMapper configuration as a starting point for more complex mappings that could be expected later on in the development.
+
+### Unit tests
+Initial test using nUnit and Moq libraries.
