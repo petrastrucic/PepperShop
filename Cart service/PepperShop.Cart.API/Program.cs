@@ -4,6 +4,7 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using PepperShop.Cart.API.Settings;
 using PepperShop.Cart.API.Utilities;
+using PepperShop.Cart.API.Utilities.CorrelationIdMiddleware;
 using PepperShop.Cart.Data.Repositories;
 using PepperShop.Cart.Library;
 using PepperShop.Cart.Library.Services;
@@ -17,8 +18,11 @@ namespace PepperShop.Cart.API
         public static async Task Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .Enrich.WithEnvironmentName()
+                .Enrich.WithThreadId()
                 .MinimumLevel.Debug()
-                .WriteTo.Console()
+                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] ({EnvironmentName}/{ThreadId}) {Message:lj} {Properties:j}{NewLine}{Exception}")
                 .CreateLogger();
 
             Log.Information("Starting application");
@@ -44,7 +48,14 @@ namespace PepperShop.Cart.API
                     policy.RequireClaim("scope", "cartService");
                 });
             });
+
+            // Register HttpClient with correlation handler
+            builder.Services.AddTransient<CorrelationIdHandler>();
+            builder.Services.AddHttpClient("WithCorrelation")
+                .AddHttpMessageHandler<CorrelationIdHandler>();
+
             builder.Services.AddControllers();
+
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
@@ -101,7 +112,20 @@ namespace PepperShop.Cart.API
 
             var app = builder.Build();
 
-            app.UseSerilogRequestLogging();
+            app.UseMiddleware<CorrelationIdMiddleware>();
+
+            app.UseSerilogRequestLogging(options =>
+            {
+                options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms with CorrelationId {CorrelationId}";
+                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                {
+                    if (httpContext.Items.TryGetValue("CorrelationId", out var correlationId))
+                    {
+                        diagnosticContext.Set("CorrelationId", correlationId);
+                    }
+                };
+            });
+
             app.MapHealthChecks("/health/self");
             app.MapHealthChecks("/health/cosmosdb");
 
