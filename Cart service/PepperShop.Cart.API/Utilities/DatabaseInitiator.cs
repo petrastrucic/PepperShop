@@ -51,20 +51,23 @@ namespace PepperShop.Cart.API.Utilities
             await SeedDataAsync(container);
         }
 
+        /// <summary>
+        /// Seeds initial data into the database container if it is empty.
+        /// </summary>
         private static async Task SeedDataAsync(Container container)
         {
-            // Implement your data seeding logic here
-            // For example, you can create initial items in the database
-            // or perform any other necessary setup tasks.
+            var existingItems = await container.GetItemQueryIterator<Data.Entities.Cart>("SELECT * FROM c").ReadNextAsync();
+            if (!existingItems.Any())
+            {
+                Data.Entities.Cart item = new Data.Entities.Cart(
+                    "someRandomId",
+                    null);
 
-            Data.Entities.Cart item = new Data.Entities.Cart(
-                "someRandomId",
-                null);
-
-            Data.Entities.Cart createdItem = await container.CreateItemAsync(
-                item: item,
-                partitionKey: new PartitionKey("someRandomId")
-            );
+                Data.Entities.Cart createdItem = await container.CreateItemAsync(
+                    item: item,
+                    partitionKey: new PartitionKey("someRandomId")
+                );
+            }
         }
     }
 }

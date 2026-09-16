@@ -1,5 +1,7 @@
 using AutoMapper;
+using HealthChecks.CosmosDb;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using PepperShop.Cart.API.Settings;
 using PepperShop.Cart.API.Utilities;
 using PepperShop.Cart.Data.Repositories;
@@ -56,7 +58,7 @@ namespace PepperShop.Cart.API
             CosmosClient cosmosClient = DatabaseInitiator.ConfigureDbClient(dbConfig);
 
             builder.Services.AddSingleton(cosmosClient);
-            builder.Services.AddSingleton<ICartRepository<Data.Entities.Cart>>(sp =>
+            builder.Services.AddScoped<ICartRepository<Data.Entities.Cart>>(sp =>
                 new CartRepository(
                     sp.GetRequiredService<CosmosClient>(),
                     dbConfig.DatabaseName,
@@ -65,7 +67,6 @@ namespace PepperShop.Cart.API
             );
 
             await DatabaseInitiator.ConfigureDatabaseAsync(cosmosClient, dbConfig);
-
             #endregion
 
             #region Business layer configuration
@@ -85,11 +86,24 @@ namespace PepperShop.Cart.API
             });
 
             builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy())
+                .AddAzureCosmosDB(
+                    optionsFactory: sp => new AzureCosmosDbHealthCheckOptions
+                    {
+                        DatabaseId = dbConfig.DatabaseName,
+                        ContainerIds = new[] { dbConfig.ContainerName }
+                    },
+                    name: "cosmosdb",
+                    failureStatus: HealthStatus.Unhealthy,
+                    tags: new[] { "database", "cosmosdb" });
             #endregion
 
             var app = builder.Build();
 
             app.UseSerilogRequestLogging();
+            app.MapHealthChecks("/health/self");
+            app.MapHealthChecks("/health/cosmosdb");
 
             // Configure the HTTP request pipeline
             if (app.Environment.IsDevelopment())
