@@ -10,8 +10,8 @@ namespace PepperShop.Cart.Library.Services
 
         public CartService(ICartRepository<Data.Entities.Cart> repository, IMapper mapper)
         {
-            _repository = repository;
-            _mapper = mapper;
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public async Task<Dtos.Cart> GetCartAsync(string userId)
