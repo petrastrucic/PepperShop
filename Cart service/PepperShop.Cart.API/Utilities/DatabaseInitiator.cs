@@ -59,9 +59,15 @@ namespace PepperShop.Cart.API.Utilities
             var existingItems = await container.GetItemQueryIterator<Data.Entities.Cart>("SELECT * FROM c").ReadNextAsync();
             if (!existingItems.Any())
             {
-                Data.Entities.Cart item = new Data.Entities.Cart(
-                    "someRandomId",
-                    null);
+                Data.Entities.Cart item = new Data.Entities.Cart()
+                {
+                    id = "someRandomId",
+                    Items = null,
+                    CreatedAt = DateTime.UtcNow,
+                    Discount = 0.0m,
+                    TotalPrice = 0.0m,
+                    Currency = "USD"
+                };
 
                 Data.Entities.Cart createdItem = await container.CreateItemAsync(
                     item: item,

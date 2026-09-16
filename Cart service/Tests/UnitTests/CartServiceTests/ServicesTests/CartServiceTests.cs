@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Moq;
 using PepperShop.Cart.Data.Repositories;
 using PepperShop.Cart.Library.Dtos;
@@ -12,10 +13,13 @@ namespace CartServiceTests.ServicesTests
         private Mock<ICartRepository<PepperShop.Cart.Data.Entities.Cart>> _cartRepositoryMock = null!;
         private CartService _cartService = null!;
         private Mock<IMapper> _mapperMock;
+        private Mock<ILogger<CartService>> _loggerMock;
 
         [SetUp]
         public void SetUp()
         {
+            _loggerMock = new Mock<ILogger<CartService>>(MockBehavior.Default);
+
             _mapperMock = new Mock<IMapper>(MockBehavior.Default);
             _mapperMock
                 .Setup(m => m.Map<Cart>(It.IsAny<PepperShop.Cart.Data.Entities.Cart>()))
@@ -27,8 +31,10 @@ namespace CartServiceTests.ServicesTests
                     TotalPrice = src.TotalPrice,
                     Currency = src.Currency
                 });
+
             _cartRepositoryMock = new Mock<ICartRepository<PepperShop.Cart.Data.Entities.Cart>>();
-            _cartService = new CartService(_cartRepositoryMock.Object, _mapperMock.Object);
+
+            _cartService = new CartService(_cartRepositoryMock.Object, _mapperMock.Object, _loggerMock.Object);
         }
 
         [Test]

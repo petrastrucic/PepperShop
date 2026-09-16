@@ -6,7 +6,8 @@ namespace PepperShop.Cart.Library
     {
         public MappingProfile()
         {
-            CreateMap<Data.Entities.Cart, Dtos.Cart>();
+            CreateMap<Data.Entities.Cart, Dtos.Cart>()
+                .ForSourceMember(_ => _.CreatedAt, opt => opt.DoNotValidate());
             CreateMap<Data.Entities.CartItem, Dtos.CartItem>();
         }
     }
