@@ -14,7 +14,7 @@ namespace PepperShop.Cart.API.Controllers
             _cartService = cartService;
         }
 
-        [HttpGet("/basic")]
+        [HttpGet("/")]
         public async Task<Library.Dtos.Cart> GetAsync(string userId)
         {
             return await _cartService.GetCartAsync(userId);

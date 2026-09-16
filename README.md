@@ -1,10 +1,10 @@
-# Introduction
-
-### Prepare environment for the project
+# PepperShop
+## Prepare environment
 1. Install Azure Cosmos Emulator and run it locally. https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-develop-emulator?tabs=windows%2Ccsharp&pivots=api-nosql#install-the-emulator
 2. Run Emulator
 3. In `appsettings.Development.json` file in the solution, at `AuthKey` set your local emulator key
 
+## Implementation PoCs
 ### Authentication
 #### Client credentials PoC
 1. Run IdentityServer (self-hosted launch profile)
@@ -28,3 +28,9 @@
 
    - On `/cart` endpoint provide userId `someRandomId` and you fetch seeded cart item.
    - `/identity` endpoint produces 401 response since Swagger is not configured as one of the trusted clients.
+
+### Serilog
+Basic logging is added to the project. You can observe local logs on the path `**\PepperShop\Cart service\PepperShop.Cart.API\logs`.
+
+### HealthCheck
+Self-service health check is added for the API and it can be checked on the URL `https://localhost:4001/health/self`. Custom check for Cosmos db connection is also added and it can be checked on the URL `https://localhost:4001/health/cosmosdb`. If you exit local Cosmos storage emulator, health checks displays unhealthy status but it takes some time to load the result because of the retry policy.
